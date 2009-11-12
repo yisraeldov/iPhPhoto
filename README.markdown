@@ -11,4 +11,4 @@ XMP:            CCAttributionShareAlike
 
 ## iPhPhoto ##
 
-This is a script that will parse your iPhoto library and display it on your site, written in PHP 
+This is a script that will parse your iPhoto library and display it on your site, written in PHP. It is only intended to work on safari.
