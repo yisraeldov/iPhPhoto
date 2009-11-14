@@ -1,5 +1,8 @@
 <?PHP
 class AlbumsController extends AppController {
+     // public $components = array();
+     var $helpers = array('Html','Ajax','Javascript');
+     var $components = array( 'RequestHandler' );
     function index() {
         $result = $this->Album->findAll();
         $conditions= array('Album Type' => 'Regular');

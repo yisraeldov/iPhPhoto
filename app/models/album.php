@@ -18,7 +18,7 @@ class Album extends AppModel {
 	   $allImages = $this->Image->findAll();
 	   $images=array();
 	   foreach($album['KeyList'] as $key){
-	       $images[]=$allImages[$key];
+	       $images[$key]=$allImages[$key];
 	   }
 	   $album['Images']=$images;
 	   return $album;
