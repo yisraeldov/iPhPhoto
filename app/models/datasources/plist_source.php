@@ -8,7 +8,7 @@ class PlistSource extends DataSource
     var $plistAray;
     var $sources = array('albums' => 'List of Albums', 
         'images' => 'Master Image List',
-        'Root' => NULL,
+        'roots' => NULL,
         );
 
     public function listSources() { 
@@ -19,6 +19,12 @@ class PlistSource extends DataSource
     function __construct($config)
     {   
         $this->file = $config['filePath'];
+        if(!is_readable($this->file)){
+            /*
+                TODO make the right error handler for noPlistFile.
+            */
+            $this->cakeError('noPlistFile',array('code'=>'500','message'=>'The plist file could not be read'));
+        }
         App::import('vendor','propertylist',array('file'=>'CFPropertyList-1.0.2/CFPropertyList.php'));
         $this->plist = new CFPropertyList( $this->file, CFPropertyList::FORMAT_XML );
         $this->plistArray = $this->plist->toArray() ;
@@ -42,6 +48,7 @@ class PlistSource extends DataSource
         }
         else {
             $results = $this->plistArray;
+            $results['File Path'] = $this->file ; // so we can know stuff about where the file is
         }
         $filteredResults = array();
         if (isset($queryData['conditions'])){

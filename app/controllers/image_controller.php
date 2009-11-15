@@ -24,6 +24,9 @@ class ImageController extends AppController {
         $this->set($params);
     }
     
+    /*
+        TODO make this also translate path
+    */
     function view($imageId) {
         $this->view = 'Media';
         $images = ($this->Image->findAll());
