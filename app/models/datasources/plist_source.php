@@ -18,7 +18,7 @@ class PlistSource extends DataSource
 
     function __construct($config)
     {   
-        $this->file = '/Users/yisraeldov/Pictures/iPhoto Library/AlbumData.xml';
+        $this->file = $config['filePath'];
         App::import('vendor','propertylist',array('file'=>'CFPropertyList-1.0.2/CFPropertyList.php'));
         $this->plist = new CFPropertyList( $this->file, CFPropertyList::FORMAT_XML );
         $this->plistArray = $this->plist->toArray() ;

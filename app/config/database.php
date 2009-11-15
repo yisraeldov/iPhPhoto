@@ -7,11 +7,12 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '',
-		'database' => 'cake',
+		'database' => 'iphphoto',
 	);
 	
 	var $plist =array(
 	    'datasource'=>'plist',
+	    'filePath'=>'/Users/yisraeldov/Pictures/iPhoto Library/AlbumData.xml',
 	);
 }
 ?>
