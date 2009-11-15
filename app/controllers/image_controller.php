@@ -10,15 +10,16 @@ class ImageController extends AppController {
     }
     function thumb($imageId) {
         $this->view = 'Media';
-        $images = ($this->Image->findAll());
-        $image= $images[$imageId];
+        
+        $image= $this->Image->findById($imageId);
         $path = $this->translatePath($image['ThumbPath']);
         $params = array(
             'id' => basename($path),
             // 'name' => 'example',
         // 'download' => true,
         'extension' => 'jpg',
-            'path' => dirname($path) . DS
+            'path' => dirname($path) . DS,
+            'cache' => 30, // browser side caching ... 
             );
         // trigger_error(print_r($params,1) );
         $this->set($params);
@@ -32,14 +33,19 @@ class ImageController extends AppController {
         $images = ($this->Image->findAll());
         $image= $images[$imageId];
         $pathInfo = pathinfo($image['ImagePath']);
+        $path = $this->translatePath($image['ImagePath']);
         $params = array(
-            'id' => basename($image['ImagePath']),
+            'id' => basename($path),
             // 'name' => 'example',
-            // 'download' => true,
-            'extension' => strtolower( $pathInfo['extension']),
-            'path' => dirname($image['ImagePath']) . DS
-            );
-        // trigger_error(print_r($params,1) );
+        // 'download' => true,
+        'extension' => strtolower( $pathInfo['extension']),
+            'path' => dirname($path) . DS,
+            'cache' => 30, // browser side caching ... 
+        );
+        if(!is_readable($path)){
+            $this->cakeError('error404');
+        }
+        $this->log(print_r($params,1));
         $this->set($params);
     }
     
