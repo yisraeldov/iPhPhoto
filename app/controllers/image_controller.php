@@ -12,13 +12,13 @@ class ImageController extends AppController {
         $this->view = 'Media';
         $images = ($this->Image->findAll());
         $image= $images[$imageId];
-
+        $path = $this->translatePath($image['ThumbPath']);
         $params = array(
-            'id' => basename($image['ThumbPath']),
+            'id' => basename($path),
             // 'name' => 'example',
         // 'download' => true,
         'extension' => 'jpg',
-            'path' => dirname($image['ThumbPath']) . DS
+            'path' => dirname($path) . DS
             );
         // trigger_error(print_r($params,1) );
         $this->set($params);
@@ -38,6 +38,19 @@ class ImageController extends AppController {
             );
         // trigger_error(print_r($params,1) );
         $this->set($params);
+    }
+    
+    private function translatePath($path)
+    {
+        $this->loadModel('Library');
+        $library =  $this->Library->findAll();
+        $archivePath = $library['Archive Path'];
+        $filePath = dirname($library['File Path']);
+        $newPath = str_replace($archivePath, $filePath, $path);
+        if(Configure::read() > 1){
+            $this->log("PATH TRANSLATE '$path' to '$newPath'",LOG_DEBUG);
+        }
+        return $newPath;
     }
 }
 ?>
