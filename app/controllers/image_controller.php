@@ -2,6 +2,9 @@
 class ImageController extends AppController {
 
 	var $name = 'Image';
+	var $helpers = array('Cache');
+	var $cacheAction = "1 hour";
+
     function index() {
         $result = $this->Image->findAll();
         // $conditions= array('Album Type' => 'Regular');
@@ -51,8 +54,13 @@ class ImageController extends AppController {
     
     private function translatePath($path)
     {
-        $this->loadModel('Library');
-        $library =  $this->Library->findAll();
+	if (($library = Cache::read('libraryRoot')) === false) {
+	    $this->loadModel('Library');
+	    $library =  $this->Library->findAll();	
+	    Cache::write('libraryRoot', $library);
+	}
+
+
         $archivePath = $library['Archive Path'];
         $filePath = dirname($library['File Path']);
         $newPath = str_replace($archivePath, $filePath, $path);
