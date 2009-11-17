@@ -19,15 +19,18 @@ class PlistSource extends DataSource
     function __construct($config)
     {   
         $this->file = $config['filePath'];
-        if(!is_readable($this->file)){
-            /*
-                TODO make the right error handler for noPlistFile.
-            */
-            $this->cakeError('noPlistFile',array('code'=>'500','message'=>'The plist file could not be read'));
-        }
-        App::import('vendor','propertylist',array('file'=>'CFPropertyList-1.0.2/CFPropertyList.php'));
-        $this->plist = new CFPropertyList( $this->file, CFPropertyList::FORMAT_XML );
-        $this->plistArray = $this->plist->toArray() ;
+ 	if (($this->plistArray = Cache::read($this->file.'array')) === false) {
+	    if(!is_readable($this->file)){
+		/*	
+		  TODO make the right error handler for noPlistFile.
+		*/
+		$this->cakeError('noPlistFile',array('code'=>'500','message'=>'The plist file could not be read'));
+	    }
+	    App::import('vendor','propertylist',array('file'=>'CFPropertyList-1.0.2/CFPropertyList.php'));
+	    $this->plist = new CFPropertyList( $this->file, CFPropertyList::FORMAT_XML );
+	    $this->plistArray = $this->plist->toArray() ;
+	    Cache::write($this->file.'array',$this->plistArray);
+	}
         parent::__construct($config);
     }
     
